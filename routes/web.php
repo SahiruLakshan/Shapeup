@@ -16,3 +16,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('dashboard.dashboard');
 });
+
+Route::get('/budgetmaster', function () {
+    return view('dashboard.budgetmaster');
+});
+
+Route::get('/subpage', function () {
+    return view('dashboard.budgetsub');
+});
+
+Route::get('/compage', function () {
+    return view('dashboard.budgetview');
+});
