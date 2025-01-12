@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BudgetController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,13 +18,12 @@ Route::get('/', function () {
     return view('dashboard.dashboard');
 });
 
-Route::get('/budgetmaster', function () {
-    return view('dashboard.budgetmaster');
-});
+//Budget Process
+Route::get('/budgetmaster', [BudgetController::class, 'master'])->name('budget.master');
+Route::post('/submit-budget', [BudgetController::class, 'store'])->name('budget.store');
+Route::get('/budget', [BudgetController::class, 'index'])->name('budget.index');
+Route::get('/budgetprocess', [BudgetController::class, 'sub'])->name('budget.sub');
 
-Route::get('/subpage', function () {
-    return view('dashboard.budgetsub');
-});
 
 Route::get('/compage', function () {
     return view('dashboard.budgetview');

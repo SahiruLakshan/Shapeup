@@ -60,9 +60,9 @@
     <div class="rectangle-wrapper">
         <div class="rectangle-background"></div>
         <div class="form-container">
-
             <h5 style="font-weight: bold">Date Range</h5>
-            <form class="mt-3">
+            <form id="budget-form" class="mt-3">
+                @csrf
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="start-date" class="form-label">Start Date</label>
@@ -82,4 +82,34 @@
         </div>
     </div>
     </div>
+@endsection
+@section('scripts')
+<script>
+    $(document).ready(function () {
+        $('#budget-form').on('submit', function (e) {
+            e.preventDefault();
+
+            let startDate = $('#start-date').val();
+            let endDate = $('#end-date').val();
+            let token = $('meta[name="csrf-token"]').attr('content');
+
+            $.ajax({
+                url: "{{ route('budget.store') }}",
+                type: "POST",
+                data: {
+                    _token: token,
+                    start_date: startDate,
+                    end_date: endDate,
+                },
+                success: function (response) {
+                    alert(response.message);
+                    window.location.href = "{{ route('budget.sub') }}";
+                },
+                error: function (xhr) {
+                    alert('An error occurred. Please try again.');
+                }
+            });
+        });
+    });
+</script>
 @endsection
