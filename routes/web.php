@@ -23,6 +23,7 @@ Route::get('/budgetmaster', [BudgetController::class, 'master'])->name('budget.m
 Route::post('/submit-budget', [BudgetController::class, 'store'])->name('budget.store');
 Route::get('/budget', [BudgetController::class, 'index'])->name('budget.index');
 Route::get('/budgetprocess', [BudgetController::class, 'sub'])->name('budget.sub');
+Route::post('/budgetplansubmit', [BudgetController::class, 'budgetplansubmit'])->name('budgetplan.store');
 
 
 Route::get('/compage', function () {

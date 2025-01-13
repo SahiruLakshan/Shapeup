@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->date('start_date');
             $table->date('end_date');
-            $table->string('department');
-            $table->string('job_title');
+            $table->integer('department');
+            $table->integer('job_title');
             $table->integer('no_of_employee');
             $table->double('basic_salary');
             $table->double('allowance');
