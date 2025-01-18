@@ -51,32 +51,50 @@
         width: 100%;
         margin-top: 100px;
     }
+
+    .label-color {
+        color: #D5D5D5;
+    }
 </style>
 
 <div style="margin-top: 50px">
 
-    <h6 style="color:#007bff">Home <i class="bi bi-chevron-right"></i> Budget Plan</h6>
-    <h3 class="form-title" style="text-align: left;font-weight:bold">Budget Plan</h3>
+    <h6 style="color:#007bff">Home <i class="bi bi-chevron-right"></i> Assets category  </h6>
+    <h3 class="form-title" style="text-align: left;font-weight:bold">Assets category  </h3>
     <div class="rectangle-wrapper">
         <div class="rectangle-background"></div>
         <div class="form-container">
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
 
-            <h5 style="font-weight: bold">Date Range</h5>
-            <form class="mt-3">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+
+            <h5 style="font-weight: bold">Update assets Catogery</h5>
+            <form class="mt-3" method="POST" action="{{ route('categories.update', $category->id) }}">
+                @csrf
+                @method('PUT')
+
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label for="start-date" class="form-label">Start Date</label>
-                        <input type="date" class="form-control" id="start-date" name="start_date"
-                            placeholder="Enter Start Date" />
+                        <label for="name" class="form-label label-color">Enter category name</label>
+                        <input type="text" class="form-control" name="category_name" id="category-name" value="{{ $category->category_name }}" />
                     </div>
                     <div class="col-md-6">
-                        <label for="end-date" class="form-label">End Date</label>
-                        <input type="date" class="form-control" id="end-date" name="end_date"
-                            placeholder="Enter End Date" />
+                        <button type="submit" class="btn btn-submit" style="margin-top: 28px; margin-left: 150px;">Update
+                            Now</button>
                     </div>
-                </div>
-                <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-submit">Proceed</button>
                 </div>
             </form>
         </div>

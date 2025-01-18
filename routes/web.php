@@ -1,4 +1,7 @@
 <?php
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\SubCategoryController;
+
 
 use Illuminate\Support\Facades\Route;
 
@@ -28,3 +31,28 @@ Route::get('/subpage', function () {
 Route::get('/compage', function () {
     return view('dashboard.budgetview');
 });
+
+
+Route::get('/category', function () {
+    return view('dashboard.asset_manage.add_catogery');
+});
+
+
+Route::get('/categoryview', [CategoryController::class, 'index'])->name('categories.index');
+Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
+Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
+Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
+Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+
+Route::get('/subcategory', function () {
+    return view('dashboard.asset_manage.add_sub_catogery');
+});
+
+
+Route::get('/sub_category', [SubCategoryController::class, 'index']);
+Route::get('/subcategoryview', [SubCategoryController::class, 'show'])->name('categories.show');
+Route::get('/categories/{id}/edit', [SubCategoryController::class, 'edit'])->name('subcategories.edit');
+Route::put('/categories/{subcategory}', [SubCategoryController::class, 'update'])->name('subcategories.update');
+
+Route::post('/create_sub_category', [SubCategoryController::class, 'store'])->name('subcategories.store');
+Route::delete('/categories/{id}', [SubCategoryController::class, 'destroy'])->name('subcategories.destroy');
