@@ -56,3 +56,14 @@ Route::put('/categories/{subcategory}', [SubCategoryController::class, 'update']
 
 Route::post('/create_sub_category', [SubCategoryController::class, 'store'])->name('subcategories.store');
 Route::delete('/categories/{id}', [SubCategoryController::class, 'destroy'])->name('subcategories.destroy');
+
+
+//allocate_asserts
+Route::get('/allocate_asserts', function () {
+    return view('dashboard.asset_manage.allocate_asserts');
+});
+
+//Add new asset
+Route::get('/add_asserts', function () {
+    return view('dashboard.asset_manage.add_new_assert');
+});
