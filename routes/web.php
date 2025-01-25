@@ -2,6 +2,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SubCategoryController;
 
+use App\Http\Controllers\AssetsController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -57,12 +58,24 @@ Route::post('/create_sub_category', [SubCategoryController::class, 'store'])->na
 Route::delete('/deletesubcategories/{id}', [SubCategoryController::class, 'destroy'])->name('subcategories.destroy');
 
 
-//allocate_asserts
-Route::get('/allocate_asserts', function () {
-    return view('dashboard.asset_manage.allocate_asserts');
-});
+
 
 //Add new asset
 Route::get('/add_asserts', function () {
     return view('dashboard.asset_manage.add_new_assert');
 });
+
+Route::get('/assets', [AssetsController::class, 'index'])->name('assets.index');
+Route::get('/assets/create', [AssetsController::class, 'create'])->name('assets.create');
+Route::post('/assets/store', [AssetsController::class, 'store'])->name('assets.store');
+Route::get('/assets/edit/{id}', [AssetsController::class, 'edit'])->name('assets.edit');
+Route::put('/assets/update/{id}', [AssetsController::class, 'update'])->name('assets.update');
+Route::delete('/assets/destroy/{id}', [AssetsController::class, 'destroy'])->name('assets.destroy');
+Route::get('/get-subcategories', [AssetsController::class, 'getSubcategories'])->name('get.subcategories');
+
+
+//allocate_asserts
+Route::get('/allocate_asserts', function () {
+    return view('dashboard.asset_manage.allocate_asserts');
+});
+
