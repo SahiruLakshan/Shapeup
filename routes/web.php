@@ -40,9 +40,9 @@ Route::get('/category', function () {
 
 Route::get('/categoryview', [CategoryController::class, 'index'])->name('categories.index');
 Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
-Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
+Route::get('/categoriesedit/{id}', [CategoryController::class, 'edit'])->name('categories.edit');
 Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
-Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+Route::delete('/deletecategories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
 Route::get('/subcategory', function () {
     return view('dashboard.asset_manage.add_sub_catogery');
@@ -50,12 +50,11 @@ Route::get('/subcategory', function () {
 
 
 Route::get('/sub_category', [SubCategoryController::class, 'index']);
-Route::get('/subcategoryview', [SubCategoryController::class, 'show'])->name('categories.show');
-Route::get('/categories/{id}/edit', [SubCategoryController::class, 'edit'])->name('subcategories.edit');
-Route::put('/categories/{subcategory}', [SubCategoryController::class, 'update'])->name('subcategories.update');
-
+Route::get('/subcategoryview', [SubCategoryController::class, 'show'])->name('subcategories.show');
+Route::get('/editsubcategories/{id}', [SubCategoryController::class, 'edit'])->name('subcategories.edit');
+Route::put('/subcategories/{id}', [SubCategoryController::class, 'update'])->name('subcategories.update');
 Route::post('/create_sub_category', [SubCategoryController::class, 'store'])->name('subcategories.store');
-Route::delete('/categories/{id}', [SubCategoryController::class, 'destroy'])->name('subcategories.destroy');
+Route::delete('/deletesubcategories/{id}', [SubCategoryController::class, 'destroy'])->name('subcategories.destroy');
 
 
 //allocate_asserts

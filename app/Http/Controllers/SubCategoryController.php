@@ -15,7 +15,9 @@ class SubCategoryController extends Controller
 
     public function show()
     {
-        $categories = Category::with('subcategories')->get(); // Assuming you have a relationship defined
+        $categories = Category::with(['subcategories' => function ($query) {
+            $query->where('status', 1); // Only fetch active subcategories
+        }])->get();
         return view('dashboard.asset_manage.show_sub_catogery', compact('categories'));
     }
 
@@ -63,38 +65,32 @@ class SubCategoryController extends Controller
     // }
    
 
-    public function update(Request $request, SubCategory $subcategory)
-    {
-        // Log the incoming request data
-        Log::debug('Incoming update request data:', $request->all());
-    
-        $validatedData = $request->validate([
-            'category_id' => 'nullable|exists:categories,id', // Make it nullable to allow using the current value
-            'sub_category' => 'required|string|max:255',
-        ]);
-    
-        // Log validated data
-        Log::debug('Validated data:', $validatedData);
-    
-        // Determine category_id to be updated
-        $categoryId = $request->input('category_id') ?? $subcategory->category_id;
-        Log::debug('Final category_id to update:', ['category_id' => $categoryId]);
-    
-        // Update the subcategory
+    public function update(Request $request, $id)
+{
+    // Validate the incoming request data
+    $request->validate([
+        'category_id' => 'required|exists:categories,id',
+        'sub_category' => 'required|string|max:255',
+    ]);
+
+    try {
+        // Find the subcategory by ID
+        $subcategory = SubCategory::findOrFail($id);
+
+        // Update subcategory data
         $subcategory->update([
-            'category_id' => $categoryId,
-            'sub_category' => $validatedData['sub_category'],
+            'category_id' => $request->category_id,
+            'sub_category' => $request->sub_category,
         ]);
-    
-        // Log after update
-        Log::info('Subcategory updated successfully.', [
-            'id' => $subcategory->id,
-            'category_id' => $subcategory->category_id,
-            'sub_category' => $subcategory->sub_category,
-        ]);
-    
-        return redirect()->route('categories.show')->with('success', 'Subcategory updated successfully.');
+
+        // Redirect back with success message
+        return redirect()->route('subcategories.show')->with('success', 'Sub Category updated successfully!');
+    } catch (\Exception $e) {
+        // Handle any errors and redirect back with error message
+        return redirect()->back()->withErrors(['error' => 'Something went wrong. Please try again.']);
     }
+}
+
     
 
     public function destroy($id)
@@ -103,7 +99,7 @@ class SubCategoryController extends Controller
         $subcategory->update(['status' => 0]);
 
         // Redirect back with a success message
-        return redirect()->route('subcategories.index')->with('success', 'Subcategory status updated successfully!');
+        return redirect()->route('subcategories.show')->with('success', 'Subcategory status updated successfully!');
     }
 
 }

@@ -57,7 +57,7 @@
             @forelse($categories as $category)
                 @foreach($category->subcategories as $subcategory)
                     <tr>
-                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $subcategory->id }}</td>
                         <td>{{ $category->category_name }}</td>
                         <td>{{ $subcategory->sub_category }}</td>
                         <td>{{ $subcategory->created_at->format('Y-m-d') }}</td>
