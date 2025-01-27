@@ -75,4 +75,8 @@ class BudgetController extends Controller
             return redirect()->back()->withErrors('An error occurred: ' . $e->getMessage());
         }
     }
+
+    public function budgetcomparison(){
+        return view('dashboard.budget.budgetview');
+    }
 }
