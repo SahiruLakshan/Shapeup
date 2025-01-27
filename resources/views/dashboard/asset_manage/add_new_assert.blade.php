@@ -94,13 +94,13 @@
                                 <option value="{{ $category->id }}">{{ $category->category_name }}</option>
                             @endforeach
                         </select>
-                        
+
                     </div>
                     <div class="col-md-6">
                         <label for="location" class="form-label label-color">Select sub category</label>
                         <select class="form-select" id="sub_category" name="sub_category">
                             <option selected disabled>Select sub category</option>
-                            <!-- Subcategories will be populated via AJAX -->
+                            <!-- Subcategories-->
                         </select>
                     </div>
                 </div>
@@ -157,7 +157,6 @@
                     data: { category_id: categoryId },
                     dataType: "json",
                     success: function (data) {
-                        console.log('Subcategories:', data);  // Debugging output
                         $('#sub_category').empty().append('<option selected disabled>Select sub category</option>');
                         if (data.length > 0) {
                             $.each(data, function (key, value) {
