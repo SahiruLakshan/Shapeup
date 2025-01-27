@@ -65,8 +65,8 @@ Route::get('/add_asserts', function () {
     return view('dashboard.asset_manage.add_new_assert');
 });
 
-Route::get('/assets', [AssetsController::class, 'index'])->name('assets.index');
-Route::get('/assets/create', [AssetsController::class, 'create'])->name('assets.create');
+Route::get('/viewassets', [AssetsController::class, 'index'])->name('assets.index');
+Route::get('/assets_create', [AssetsController::class, 'create'])->name('assets.create');
 Route::post('/assets/store', [AssetsController::class, 'store'])->name('assets.store');
 Route::get('/assets/edit/{id}', [AssetsController::class, 'edit'])->name('assets.edit');
 Route::put('/assets/update/{id}', [AssetsController::class, 'update'])->name('assets.update');

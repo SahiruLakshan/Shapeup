@@ -73,22 +73,33 @@ class AssetsController extends Controller
     // View all assets
     public function index()
     {
-        $assets = Asset::with('category', 'subCategory')->get();
-        return view('dashboard.asset_manage.view_assets', compact('assets'));
+        $assets = Asset::with('category', 'subCategory')
+        ->where('status', 1)  // Filter only active assets
+        ->get();
+        return view('dashboard.asset_manage.show_assets', compact('assets'));
     }
 
     // Edit asset
-    public function edit($id)
-    {
-        $asset = Asset::findOrFail($id);
-        $categories = Category::with([
-            'subcategories' => function ($query) {
-                $query->where('status', 1);
-            }
-        ])->where('status', 1)->get();
+    // public function edit($id)
+    // {
+    //     $asset = Asset::findOrFail($id);
+    //     $categories = Category::with([
+    //         'subcategories' => function ($query) {
+    //             $query->where('status', 1);
+    //         }
+    //     ])->where('status', 1)->get();
 
-        return view('dashboard.asset_manage.edit_asset', compact('asset', 'categories'));
-    }
+    //     return view('dashboard.asset_manage.update.update_assets', compact('asset', 'categories'));
+    // }
+    public function edit($id)
+{
+    $asset = Asset::findOrFail($id);
+    $categories = Category::all();
+    $subCategories = SubCategory::all(); // Make sure this is included
+
+    return view('dashboard.asset_manage.update.update_assets', compact('asset', 'categories', 'subCategories'));
+}
+
 
     // Update asset
     public function update(Request $request, $id)
@@ -121,7 +132,7 @@ class AssetsController extends Controller
     public function destroy($id)
     {
         $asset = Asset::findOrFail($id);
-        $asset->delete();
+        $asset->update(['status' => 0]);
 
         return redirect()->route('assets.index')->with('success', 'Asset deleted successfully!');
     }
