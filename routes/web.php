@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\AssetsController;
 use Illuminate\Support\Facades\Route;
@@ -68,3 +69,5 @@ Route::get('/add_asserts', function () {
 Route::get('/allocate_asserts', function () {
     return view('dashboard.asset_manage.allocate_asserts');
 });
+
+Route::resource('insurance', InsuranceController::class);
