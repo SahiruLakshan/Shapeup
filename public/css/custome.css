@@ -1,0 +1,203 @@
+body {
+    font-family: "Arial", sans-serif;
+    background-color: #f8f9fa;
+}
+
+.sidebar {
+    background-color: #fff;
+    height: auto;
+    padding: 20px;
+    border-right: 1px solid #e0e0e0;
+}
+
+.sidebar .nav-link {
+    color: #333;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.sidebar .nav-link i {
+    margin-right: 15px;
+    font-size: 18px;
+}
+
+.sidebar .nav-link.active {
+    color: #007bff;
+}
+
+.sidebar .nav-link:hover {
+    color: #007bff;
+}
+
+.content {
+    padding: 20px;
+}
+
+.header {
+    background-color: #e3f2fd;
+    padding: 0 20px;
+    border-radius: 15px;
+    height: 50px;
+}
+
+.right-section .right {
+    display: inline-flex;
+    align-items: center;
+    font-size: 16px;
+    height: 100%;
+    margin-right: 60px;
+}
+
+.right-section .right:last-child {
+    margin-right: 0;
+}
+
+.header a {
+    font-size: 16px;
+}
+
+.header .fa-bell {
+    font-size: 18px;
+}
+
+.header .user-info img {
+    width: 40px;
+    height: 40px;
+}
+
+.header .position-relative span {
+    width: 10px;
+    height: 10px;
+}
+
+.col-2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+}
+
+.header-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.form-container {
+    position: relative;
+    z-index: 1;
+    /* Above the rectangle background */
+    padding: 40px;
+    width: 100%;
+    max-width: 900px;
+    border-radius: 15px;
+    top: 10px;
+}
+
+.btn-submit {
+    background-color: #1bbddd;
+    color: #fff;
+    font-size: 16px;
+    padding: 10px 40px;
+    border: none;
+    border-radius: 5px;
+}
+
+.btn-submit:hover {
+    background-color: #17a2b8;
+}
+
+.rectangle-background {
+    position: absolute;
+    width: 1200px;
+    height: 600px;
+    background-color: #f0f8ff;
+    /* Light blue background */
+    border-radius: 15px;
+    /* Rounded corners */
+    z-index: 0;
+    /* Behind the form */
+}
+
+.rectangle-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 100px;
+}
+
+/* Set blue background color for even rows */
+.table-striped tbody tr:nth-child(even) {
+    background-color: blue;
+    color: white; /* Optional: Make text white for readability */
+}
+
+.search-bar {
+    background-color: #f0f8ff;
+    /* Light blue background */
+    border-radius: 20px;
+    /* Rounded corners */
+    border: 1px solid transparent;
+    /* Removes visible border */
+    padding: 10px 15px;
+    /* Adjust padding for a clean look */
+    font-size: 16px;
+    /* Adjust text size */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    /* Optional subtle shadow */
+    width: 250px;
+}
+
+.search-bar:focus {
+    outline: none;
+    /* Remove default outline */
+    border: 1px solid #007bff;
+    /* Highlight border on focus */
+    box-shadow: 0px 2px 6px rgba(0, 123, 255, 0.3);
+    /* Add shadow on focus */
+}
+
+.btn-submit {
+    background-color: #1bbddd;
+    color: #fff;
+    font-size: 16px;
+    padding: 10px 40px;
+    border: none;
+    border-radius: 5px;
+}
+
+.btn-submit:hover {
+    background-color: #17a2b8;
+}
+
+.rectangle-background {
+    position: absolute;
+    width: 1200px;
+    height: 400px;
+    background-color: #f0f8ff;
+    /* Light blue background */
+    border-radius: 15px;
+    /* Rounded corners */
+    z-index: 0;
+    /* Behind the form */
+}
+
+.rectangle-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 100px;
+}
+
+.custom-modal-width {
+    max-width: 1000px; /* Adjust the model width */
+}
+  

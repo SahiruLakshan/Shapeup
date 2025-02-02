@@ -10,12 +10,7 @@ use Illuminate\Http\Request;
 
 class BudgetController extends Controller
 {
-    //Load Master Page
-    public function master()
-    {
-        return view('dashboard.budget.budgetmaster');
-    }
-
+    
     //Master Page Process
     public function store(Request $request)
     {
@@ -34,16 +29,6 @@ class BudgetController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->withErrors('An error occurred: ' . $e->getMessage());
         }
-    }
-
-    //Load Budget Page
-    public function sub()
-    {
-        $dates = Budget::select('start_date', 'end_date')->orderBy('start_date', 'asc')->get();
-        $groupedDates = $dates->groupBy('start_date');
-        $departments = Department::all();
-        $titles = Job_Titles::all();
-        return view('dashboard.budget.budgetsub', compact('groupedDates', 'departments', 'titles'));
     }
 
     //Budget Plan Page Process
@@ -76,7 +61,11 @@ class BudgetController extends Controller
         }
     }
 
-    public function budgetcomparison(){
-        return view('dashboard.budget.budgetview');
+    public function budgets(){
+        $dates = Budget::select('start_date', 'end_date')->orderBy('start_date', 'asc')->get();
+        $groupedDates = $dates->groupBy('start_date');
+        $departments = Department::all();
+        $titles = Job_Titles::all();
+        return view('dashboard.budget.budgetview',compact('groupedDates', 'departments', 'titles'));
     }
 }
