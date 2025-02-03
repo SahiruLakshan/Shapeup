@@ -102,7 +102,7 @@
 </div>
 
 
-<!-- update Subcategory Modal -->
+<!-- Update Subcategory Modal -->
 <!-- Update Subcategory Modal -->
 <div class="modal fade" id="updateSubCategoryModal" tabindex="-1" role="dialog"
     aria-labelledby="updateSubCategoryModalLabel" aria-hidden="true">
@@ -115,28 +115,26 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="updateSubCategoryForm" method="POST" action="{{ route('subcategories.update', ':id') }}">
+                <form id="updateSubCategoryForm" method="POST" action="">
                     @csrf
                     @method('PUT')
-
-                    <input type="hidden" id="subcategory_id" name="subcategory_id">
-
+                    <input type="hidden" id="subcategory_id" name="subcategory_id"> 
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label for="category_id" class="form-label label-color">Select Category</label>
-                            <select class="form-select" name="category_id" id="category_id">
+                            <label for="edit_category_id" class="form-label label-color">Select Category</label>
+                            <select class="form-select" id="edit_category_id" name="category_id" required>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->category_name }}</option>
                                 @endforeach
                             </select>
+                            
                         </div>
                         <div class="col-md-6">
-                            <label for="sub_category" class="form-label label-color">Subcategory Name</label>
-                            <input type="text" class="form-control" id="sub_category" name="sub_category" required
+                            <label for="edit_sub_category" class="form-label label-color">Subcategory Name</label>
+                            <input type="text" class="form-control" id="edit_sub_category" name="sub_category" required
                                 placeholder="Enter subcategory name">
                         </div>
                     </div>
-
                     <div class="text-center mt-4">
                         <button type="submit" class="btn btn-submit">Update Now</button>
                     </div>
@@ -151,75 +149,76 @@
 
 
 
-
 <script>
+  $(document).ready(function () {
     // Handle form submission using AJAX
-    document.getElementById('addSubCategoryForm').addEventListener('submit', function (e) {
+    $('#addSubCategoryForm').submit(function (e) {
         e.preventDefault(); // Prevent default form submission
 
         const formData = new FormData(this);
 
-        fetch("{{ route('subcategories.store') }}", {
+        $.ajax({
+            url: "{{ route('subcategories.store') }}",
             method: 'POST',
-            body: formData,
+            data: formData,
+            processData: false,
+            contentType: false,
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
                 'Accept': 'application/json',
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
+            },
+            success: function (data) {
                 if (data.success) {
-                    // Show success message
                     Swal.fire({
                         icon: 'success',
                         title: 'Success!',
                         text: data.message,
                     }).then(() => {
-                        window.location.reload(); // Reload the page to show the new subcategory
+                        location.reload(); // Reload the page to show the new subcategory
                     });
                 } else {
-                    // Show error message
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
                         text: data.message,
                     });
                 }
-            })
-            .catch(error => {
+            },
+            error: function (xhr, status, error) {
                 console.error('Error:', error);
                 Swal.fire({
                     icon: 'error',
                     title: 'Error!',
                     text: 'An error occurred while processing your request.',
                 });
-            });
+            }
+        });
     });
 
+    // Load categories function
     function loadCategories() {
-        fetch("{{ route('subcategories.index') }}")
-            .then(response => response.json())
-            .then(data => {
-                let categoriesSelect = document.getElementById('category_id');
-                categoriesSelect.innerHTML = '<option value="">Select Category</option>'; // Clear previous options
+        $.ajax({
+            url: "{{ route('subcategories.index') }}",
+            method: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                let categoriesSelect = $('#category_id');
+                categoriesSelect.empty().append('<option value="">Select Category</option>');
 
-                data.categories.forEach(function (category) {
-                    let option = document.createElement('option');
-                    option.value = category.id;
-                    option.textContent = category.category_name;
-                    categoriesSelect.appendChild(option);
+                $.each(data.categories, function (index, category) {
+                    categoriesSelect.append(`<option value="${category.id}">${category.category_name}</option>`);
                 });
-            })
-            .catch(error => {
+            },
+            error: function (xhr, status, error) {
                 console.error('Error:', error);
-            });
+            }
+        });
     }
 
     // Load categories when the page is ready
-    document.addEventListener('DOMContentLoaded', function () {
-        loadCategories();
-    });
+    loadCategories();
+});
+
 
     document.addEventListener('DOMContentLoaded', function () {
         // Your delete functionality here
@@ -247,70 +246,28 @@
     });
 
 
-    // Handle update form submission using AJAX
-    document.getElementById('updateSubCategoryForm').addEventListener('submit', function (e) {
-        e.preventDefault(); // Prevent default form submission
-
-        const formData = new FormData(this);
-        const subcategoryId = document.getElementById('subcategory_id').value; // Assuming you have a hidden input for subcategory ID
-
-        fetch("{{ route('subcategories.update', ':id') }}".replace(':id', subcategoryId), {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json',
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Show success message
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success!',
-                        text: data.message,
-                    }).then(() => {
-                        window.location.reload(); // Reload the page to show the updated data
-                    });
-                } else {
-                    // Show error message
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: data.message,
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'An error occurred while processing your request.',
-                });
-            });
-    });
-
-
-
-    document.querySelectorAll('.edit-btn').forEach(button => {
-        button.addEventListener('click', function (e) {
+// JavaScript
+$(document).ready(function () {
+        // Handle edit button click
+        $(document).on('click', '.edit-btn', function (e) {
             e.preventDefault();
+            const subcategoryId = $(this).data('id');
 
-            const subcategoryId = this.getAttribute('data-id'); // Get subcategory ID
+            // Fetch subcategory details via AJAX
+            $.ajax({
+                url: `/subcategories/${subcategoryId}/edit`,
+                method: 'GET',
+                success: function (response) {
+                    if (response.success) {
+                        const subcategory = response.subcategory;
 
-            // Use the correct URL for fetching the data
-            fetch(`/subcategories/${subcategoryId}/edit`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        const subcategory = data.subcategory; // Assuming data has subcategory and categories
+                        // Populate the update modal fields
+                        $('#subcategory_id').val(subcategory.id);
+                        $('#edit_category_id').val(subcategory.category_id);
+                        $('#edit_sub_category').val(subcategory.sub_category);
 
-                        // Populate the update form with the fetched subcategory details
-                        document.getElementById('subcategory_id').value = subcategory.id;
-                        document.getElementById('category_id').value = subcategory.category_id;
-                        document.getElementById('sub_category').value = subcategory.sub_category;
+                        // Update the form action URL
+                        $('#updateSubCategoryForm').attr('action', `/subcategories/${subcategoryId}`);
 
                         // Show the update modal
                         $('#updateSubCategoryModal').modal('show');
@@ -318,20 +275,64 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'Error!',
-                            text: 'Failed to fetch subcategory details.',
+                            text: response.message,
                         });
                     }
-                })
-                .catch(error => {
+                },
+                error: function (error) {
                     console.error('Error:', error);
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
                         text: 'An error occurred while fetching data.',
                     });
-                });
+                }
+            });
+        });
+
+        // Handle update form submission
+        $('#updateSubCategoryForm').on('submit', function (e) {
+            e.preventDefault();
+            const form = $(this);
+            const actionUrl = form.attr('action');
+            const formData = form.serialize();
+
+            $.ajax({
+                url: actionUrl,
+                method: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: response.message,
+                        }).then(() => {
+                            $('#updateSubCategoryModal').modal('hide'); 
+                            window.location.reload(); // Reload the page to reflect changes
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: response.message,
+                        });
+                    }
+                },
+                error: function (error) {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'An error occurred while updating data.',
+                    });
+                }
+            });
         });
     });
+    $('#updateSubCategoryModal').on('hidden.bs.modal', function () {  
+    $(this).find('form')[0].reset();  
+});
 
 
 </script>
