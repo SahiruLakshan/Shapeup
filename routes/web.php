@@ -4,6 +4,7 @@ use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\AssetsController;
+use App\Http\Controllers\AssetsallocationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,32 +34,31 @@ Route::get('/compage', function () {
     return view('dashboard.budgetview');
 });
 
-Route::get('/category', function () {
-    return view('dashboard.asset_manage.add_catogery');
-});
-
+//category
 
 Route::get('/categoryview', [CategoryController::class, 'index'])->name('categories.index');
 Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
-Route::get('/categoriesedit/{id}', [CategoryController::class, 'edit'])->name('categories.edit');
-Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
+// Route::get('/categoriesedit/{id}', [CategoryController::class, 'edit'])->name('categories.edit');
+// Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
 Route::delete('/deletecategories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
-Route::get('/subcategory', function () {
-    return view('dashboard.asset_manage.add_sub_catogery');
-});
+// Edit Category route
+Route::get('/categoryedit/{id}/edit', [CategoryController::class, 'edit'])->name('category.edit');
 
-Route::get('/sub_category', [SubCategoryController::class, 'index']);
+// Update Category route
+Route::put('/category/{id}', [CategoryController::class, 'update'])->name('category.update');
+
+
+//sub category
+
+Route::get('/sub_category', [SubCategoryController::class, 'index'])->name('subcategories.index');
 Route::get('/subcategoryview', [SubCategoryController::class, 'show'])->name('subcategories.show');
-Route::get('/editsubcategories/{id}', [SubCategoryController::class, 'edit'])->name('subcategories.edit');
+Route::get('/subcategories/{id}/edit', [SubCategoryController::class, 'edit'])->name('subcategories.edit');
 Route::put('/subcategories/{id}', [SubCategoryController::class, 'update'])->name('subcategories.update');
 Route::post('/create_sub_category', [SubCategoryController::class, 'store'])->name('subcategories.store');
 Route::delete('/deletesubcategories/{id}', [SubCategoryController::class, 'destroy'])->name('subcategories.destroy');
 
 //Add new asset
-Route::get('/add_asserts', function () {
-    return view('dashboard.asset_manage.add_new_assert');
-});
 
 Route::get('/viewassets', [AssetsController::class, 'index'])->name('assets.index');
 Route::get('/assets_create', [AssetsController::class, 'create'])->name('assets.create');
@@ -69,6 +69,15 @@ Route::delete('/assets/destroy/{id}', [AssetsController::class, 'destroy'])->nam
 Route::get('/get-subcategories', [AssetsController::class, 'getSubcategories'])->name('get.subcategories');
 
 //allocate_asserts
-Route::get('/allocate_asserts', function () {
-    return view('dashboard.asset_manage.allocate_asserts');
-});
+
+Route::get('/asset-allocations', [AssetsallocationController::class, 'index'])->name('asset-allocations.index');
+Route::get('/asset-allocations/create', [AssetsallocationController::class, 'create'])->name('asset-allocations.create');
+Route::post('/assetallocationstore', [AssetsallocationController::class, 'store'])->name('asset-allocations.store');
+Route::get('/asset-allocations/{assetAllocation}/edit', [AssetsallocationController::class, 'edit'])->name('asset-allocations.edit');
+Route::put('/asset-allocations/{assetAllocation}', [AssetsallocationController::class, 'update'])->name('asset-allocations.update');
+Route::delete('/asset-allocations/{id}', [AssetsallocationController::class, 'destroy'])->name('asset-allocations.destroy');
+
+// AJAX Routes
+Route::get('/get-subcategories/{category}', [AssetsallocationController::class, 'getSubCategories']);
+Route::get('/get-assets/{category}/{subcategory}', [AssetsallocationController::class, 'getAssets']);
+Route::get('/get-asset-value/{asset}', [AssetsallocationController::class, 'getAssetValue']);

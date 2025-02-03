@@ -49,31 +49,38 @@
                 <th>#</th>
                 <th>Category</th>
                 <th>Sub Category</th>
-                <th>Brand</th>
-                <th>Model</th>
-                <th>Serial Number</th>
-                <th>Asset Code</th>
+                <th>Company</th>
+                <th>Location</th>
+                <th>Branch</th>
+                <th>Employee</th>
                 <th>Asset Value</th>
+                <th>Date</th>
+                <th>Description</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-        @foreach($assets as $key => $asset)
+            @foreach($assetAllocations as $key => $allocation)
                 <tr>
                     <td>{{ $key + 1 }}</td>
-                    <td>{{ $asset->category->category_name }}</td>
-                    <td>{{ $asset->subCategory->sub_category }}</td>
-                    <td>{{ $asset->brand }}</td>
-                    <td>{{ $asset->model }}</td>
-                    <td>{{ $asset->serial_number }}</td>
-                    <td>{{ $asset->code }}</td>
-                    <td>{{ $asset->asset_value }}</td>
+                    <td>{{ $allocation->category->category_name }}</td>
+                    <td>{{ $allocation->subCategory->sub_category }}</td>
+                    <td>{{ $allocation->company }}</td>
+                    <td>{{ $allocation->location }}</td>
+                    <td>{{ $allocation->branch }}</td>
+                    <td>{{ $allocation->employee->emp_name_with_initial }}</td>
+                    <td>{{ $allocation->value }}</td>
+                    <td>{{ $allocation->date }}</td>
+                    <td>{{ $allocation->description }}</td>
                     <td>
-                        <a href="{{ route('assets.edit', $asset->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                        <form action="{{ route('assets.destroy', $asset->id) }}" method="POST" style="display:inline-block;">
+                        <a href="{{ route('asset-allocations.edit', $allocation->id) }}"
+                            class="btn btn-warning btn-sm">Edit</a>
+                        <form action="{{ route('asset-allocations.destroy', $allocation->id) }}" method="POST"
+                            style="display:inline-block;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                            <button type="submit" class="btn btn-sm btn-danger"
+                                onclick="return confirm('Are you sure?')">Delete</button>
                         </form>
                     </td>
                 </tr>

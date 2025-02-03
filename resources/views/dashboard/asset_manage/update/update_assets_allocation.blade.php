@@ -4,17 +4,12 @@
     .form-container {
         position: relative;
         z-index: 1;
-        /* Above the rectangle background */
         padding: 40px;
         width: 100%;
         max-width: 900px;
-        /* Limit max width */
         background-color: #fff;
-        /* White background */
         border-radius: 15px;
-        /* Rounded corners */
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        /* Subtle shadow */
         top: 10px;
     }
 
@@ -36,11 +31,8 @@
         width: 1200px;
         height: 400px;
         background-color: #f0f8ff;
-        /* Light blue background */
         border-radius: 15px;
-        /* Rounded corners */
         z-index: 0;
-        /* Behind the form */
     }
 
     .rectangle-wrapper {
@@ -58,9 +50,8 @@
 </style>
 
 <div style="margin-top: 50px">
-
-    <h6 style="color:#007bff">Home <i class="bi bi-chevron-right"></i> Assets allocation  </h6>
-    <h3 class="form-title" style="text-align: left;font-weight:bold">Assets allocation  </h3>
+    <h6 style="color:#007bff">Home <i class="bi bi-chevron-right"></i> Edit Asset Allocation</h6>
+    <h3 class="form-title" style="text-align: left;font-weight:bold">Edit Asset Allocation</h3>
     <div class="rectangle-wrapper">
         <div class="rectangle-background"></div>
         <div class="form-container">
@@ -80,83 +71,83 @@
                 </div>
             @endif
 
-
-            <h5 style="font-weight: bold">Assets allocation</h5>
-            <form class="mt-3" method="POST" action="{{ route('asset-allocations.store') }}">
+            <h5 style="font-weight: bold">Edit Asset Allocation</h5>
+            <form class="mt-3" method="POST" action="{{ route('asset-allocations.update', $assetAllocation->id) }}">
                 @csrf
+                @method('PUT')
 
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label for="location" class="form-label label-color">Select category</label>
+                        <label for="Select_category" class="form-label label-color">Select category</label>
                         <select class="form-select" id="Select_category" name="Select_category">
                             <option value="">Select category</option>
                             @foreach($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                <option value="{{ $category->id }}" {{ $assetAllocation->category_id == $category->id ? 'selected' : '' }}>{{ $category->category_name }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="col-md-6">
                         <label for="Company" class="form-label label-color">Company</label>
-                        <input type="text" class="form-control" id="Company" placeholder="Enter Company "
-                            name="company" />
+                        <input type="text" class="form-control" id="Company" name="company" value="{{ $assetAllocation->company }}" />
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label for="location" class="form-label label-color">Select sub category</label>
+                        <label for="sub_category" class="form-label label-color">Select sub category</label>
                         <select class="form-select" id="sub_category" name="sub_category">
                             <option value="">Select sub category</option>
+                            @foreach($subcategories as $subcategory)
+                                <option value="{{ $subcategory->id }}" {{ $assetAllocation->sub_category_id == $subcategory->id ? 'selected' : '' }}>{{ $subcategory->sub_category }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="col-md-6">
                         <label for="location" class="form-label label-color">Location</label>
-                        <input type="text" class="form-control" id="location" placeholder="Enter Location "
-                            name="location" />
+                        <input type="text" class="form-control" id="location" name="location" value="{{ $assetAllocation->location }}" />
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-6">
-                    <label for="serial number" class="form-label label-color">Serial Number</label>
-
+                        <label for="serial_number" class="form-label label-color">Serial Number</label>
                         <select class="form-select" id="serial_number" name="serial_number">
                             <option value="">Select Serial Number</option>
+                            @foreach($assets as $asset)
+                                <option value="{{ $asset->serial_number }}" {{ $assetAllocation->serial_number == $asset->serial_number ? 'selected' : '' }}>{{ $asset->serial_number }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label for="branch" class="form-label label-color">Branch </label>
-                        <input type="text" class="form-control" id="branch" placeholder="Enter branch " name="branch" />
+                        <label for="branch" class="form-label label-color">Branch</label>
+                        <input type="text" class="form-control" id="branch" name="branch" value="{{ $assetAllocation->branch }}" />
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="asset_value" class="form-label label-color">Assets value</label>
-                        <input type="text" class="form-control" id="asset_value" placeholder="Enter assets value"
-                            name="value" />
+                        <input type="text" class="form-control" id="asset_value" name="value" value="{{ $assetAllocation->value }}" />
                     </div>
                     <div class="col-md-6">
-                    <label for="employee" class="form-label label-color">Employee name</label>
-
+                        <label for="employee" class="form-label label-color">Employee name</label>
                         <select class="form-select" id="employee" name="employee_id">
                             <option value="">Select Employee</option>
                             @foreach($employees as $employee)
-                                <option value="{{ $employee->id }}">{{ $employee->emp_name_with_initial }}</option>
+                                <option value="{{ $employee->id }}" {{ $assetAllocation->employee_id == $employee->id ? 'selected' : '' }}>{{ $employee->emp_name_with_initial }}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-6">
-                    <label for="date" class="form-label label-color">Date</label>
-                    <input type="date" class="form-control" id="date" name="date" value="{{ now()->toDateString() }}" />
+                        <label for="date" class="form-label label-color">Date</label>
+                        <input type="date" class="form-control" id="date" name="date" value="{{ $assetAllocation->date }}" />
                     </div>
                     <div class="col-md-6">
                         <label for="description" class="form-label label-color">Description</label>
-                        <textarea class="form-control" id="description" rows="1" placeholder="Enter description"
-                            name="description"></textarea>
+                        <textarea class="form-control" id="description" name="description" rows="1">{{ $assetAllocation->description }}</textarea>
                     </div>
                 </div>
                 <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-submit">Add Now</button>
+                    <button type="submit" class="btn btn-submit">Update</button>
                 </div>
             </form>
         </div>
@@ -190,21 +181,9 @@
 
     // Get Asset Value when serial number is selected
     document.getElementById('serial_number').addEventListener('change', function () {
-    fetch(`/get-asset-value/${this.value}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Asset not found');
-            }
-            return response.json();
-        })
-        .then(data => {
-            document.getElementById('asset_value').value = data.value;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            document.getElementById('asset_value').value = ''; // Clear the value on error
-        });
-});
+        fetch(`/get-asset-value/${this.value}`)
+            .then(response => response.json())
+            .then(data => document.getElementById('asset_value').value = data.value);
+    });
 </script>
-
 @endsection

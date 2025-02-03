@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Category;
+use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
 
@@ -14,38 +15,55 @@ class CategoryController extends Controller
         return view('dashboard.asset_manage.show_catogery', compact('categories'));
     }
     public function store(Request $request)
-    {
-        // Validate input
+    { // Validate the request
         $request->validate([
             'category_name' => 'required|string|max:255',
         ]);
 
-        // Save category to database
-        Category::create([
-            'category_name' => $request->input('category_name'),
+        // Save the category
+        $category = new Category();
+        $category->category_name = $request->input('category_name');
+        $category->save();
+
+        // Return a JSON response
+        return response()->json([
+            'success' => true,
+            'message' => 'Category added successfully!',
+            'category' => $category,
         ]);
-
-        // Redirect or respond
-        return redirect()->route('categories.index')->with('success', 'Category added successfully!');
     }
 
-    public function edit($id)
-    {
-        $category = Category::findOrFail($id);
-        return view('dashboard.asset_manage.update.update_catogery', compact('category'));
+   // Show the category data to be updated
+   public function edit($id)
+   {
+       $category = Category::findOrFail($id); // Get category by ID
+       Log::info('Category data fetched:', ['category' => $category]);
+
+       return response()->json($category); // Return the category data as JSON
+   }
+
+   // Handle the update request
+   public function update(Request $request, $id)
+{
+    // Validate input data
+    $request->validate([
+        'category_name' => 'required|string|max:255',
+    ]);
+
+    // Find the category by ID
+    $category = Category::find($id);
+
+    if (!$category) {
+        return response()->json(['error' => 'Category not found'], 404);
     }
 
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'category_name' => 'required|string|max:255',
-        ]);
+    // Update the category
+    $category->category_name = $request->category_name;
+    $category->save();
 
-        $category = Category::findOrFail($id);
-        $category->update(['category_name' => $request->input('category_name')]);
-
-        return redirect()->route('categories.index')->with('success', 'Category updated successfully!');
-    }
+    // Return response
+    return response()->json(['success' => 'Category updated successfully']);
+}
 
     public function destroy($id)
     {

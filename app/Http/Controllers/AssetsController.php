@@ -74,7 +74,7 @@ class AssetsController extends Controller
     public function index()
     {
         $assets = Asset::with('category', 'subCategory')
-        ->where('status', 1)  // Filter only active assets
+        ->where('status', 1)  
         ->get();
         return view('dashboard.asset_manage.show_assets', compact('assets'));
     }
@@ -94,9 +94,8 @@ class AssetsController extends Controller
     public function edit($id)
 {
     $asset = Asset::findOrFail($id);
-    $categories = Category::all();
-    $subCategories = SubCategory::all(); // Make sure this is included
-
+    $categories = Category::where('status', 1)->get();
+    $subCategories = SubCategory::where('status', 1)->get();
     return view('dashboard.asset_manage.update.update_assets', compact('asset', 'categories', 'subCategories'));
 }
 

@@ -4,17 +4,12 @@
     .form-container {
         position: relative;
         z-index: 1;
-        /* Above the rectangle background */
         padding: 40px;
         width: 100%;
         max-width: 900px;
-        /* Limit max width */
         background-color: #fff;
-        /* White background */
         border-radius: 15px;
-        /* Rounded corners */
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        /* Subtle shadow */
         top: 10px;
     }
 

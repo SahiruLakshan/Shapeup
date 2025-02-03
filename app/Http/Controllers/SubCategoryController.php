@@ -10,14 +10,18 @@ class SubCategoryController extends Controller
     public function index()
     {
         $categories = Category::where('status', 1)->get();
-        return view('dashboard.asset_manage.add_sub_catogery', compact('categories'));
+        return response()->json([
+            'categories' => $categories,
+        ]);
     }
 
     public function show()
     {
-        $categories = Category::with(['subcategories' => function ($query) {
-            $query->where('status', 1); // Only fetch active subcategories
-        }])->get();
+        $categories = Category::with([
+            'subcategories' => function ($query) {
+                $query->where('status', 1); // Only fetch active subcategories
+            }
+        ])->get();
         return view('dashboard.asset_manage.show_sub_catogery', compact('categories'));
     }
 
@@ -31,67 +35,87 @@ class SubCategoryController extends Controller
             'sub_category' => 'required|string|max:255',
         ]);
 
+        // Create the subcategory
         SubCategory::create($request->all());
 
-        return redirect()->back()->with('success', 'Sub Category added successfully.');
+        // Return a JSON response for AJAX
+        return response()->json([
+            'success' => true,
+            'message' => 'Sub Category added successfully.',
+        ]);
     }
+
 
 
     public function edit($id)
     {
-        $subcategory = SubCategory::findOrFail($id); // Fetch by ID
-        $categories = Category::where('status', 1)->get();
-        return view('dashboard.asset_manage.update.update_subcatogery', compact('subcategory', 'categories'));
+        $subcategory = SubCategory::findOrFail($id); // Fetch subcategory by ID
+        $categories = Category::where('status', 1)->get(); // Fetch active categories
+    
+        // Return data as JSON for AJAX request
+        return response()->json([
+            'success' => true,
+            'subcategory' => $subcategory,
+            'categories' => $categories
+        ]);
     }
+    
 
 
-
-    // public function update(Request $request, SubCategory $subcategory)
+    // public function update(Request $request, $id)
     // {
-
-    //     Log::debug('Incoming update request data:', $request->all());
-
-    //     $validatedData = $request->validate([
-    //         'category_id' => 'nullable|exists:categories,id', // Make it nullable to allow using the current value
+    //     // Validate the incoming request data
+    //     $request->validate([
+    //         'category_id' => 'required|exists:categories,id',
     //         'sub_category' => 'required|string|max:255',
     //     ]);
-    //     $categoryId = $request->input('category_id') ?? $subcategory->category_id;
-    //     $subcategory->update([
-    //         'category_id' => $categoryId,
-    //         'sub_category' => $validatedData['sub_category'],
-    //     ]);
 
-    //     return redirect()->route('categories.show')->with('success', 'Subcategory updated successfully.');
+    //     try {
+    //         // Find the subcategory by ID
+    //         $subcategory = SubCategory::findOrFail($id);
+
+    //         // Update subcategory data
+    //         $subcategory->update([
+    //             'category_id' => $request->category_id,
+    //             'sub_category' => $request->sub_category,
+    //         ]);
+
+    //         // Redirect back with success message
+    //         return redirect()->route('subcategories.show')->with('success', 'Sub Category updated successfully!');
+    //     } catch (\Exception $e) {
+    //         // Handle any errors and redirect back with error message
+    //         return redirect()->back()->withErrors(['error' => 'Something went wrong. Please try again.']);
+    //     }
     // }
-   
-
     public function update(Request $request, $id)
 {
-    // Validate the incoming request data
-    $request->validate([
-        'category_id' => 'required|exists:categories,id',
-        'sub_category' => 'required|string|max:255',
-    ]);
-
     try {
-        // Find the subcategory by ID
         $subcategory = SubCategory::findOrFail($id);
-
-        // Update subcategory data
-        $subcategory->update([
-            'category_id' => $request->category_id,
-            'sub_category' => $request->sub_category,
+        
+        // Validate the incoming request data
+        $validated = $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'sub_category' => 'required|string|max:255',
         ]);
 
-        // Redirect back with success message
-        return redirect()->route('subcategories.show')->with('success', 'Sub Category updated successfully!');
+        // Update the subcategory
+        $subcategory->update($validated);
+
+        // Return a response as JSON
+        return response()->json([
+            'success' => true,
+            'message' => 'Subcategory updated successfully!',
+        ]);
     } catch (\Exception $e) {
-        // Handle any errors and redirect back with error message
-        return redirect()->back()->withErrors(['error' => 'Something went wrong. Please try again.']);
+        return response()->json([
+            'success' => false,
+            'message' => 'Something went wrong. Please try again.',
+        ], 500);
     }
 }
 
     
+
 
     public function destroy($id)
     {
