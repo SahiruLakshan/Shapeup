@@ -103,7 +103,6 @@
 
 
 <!-- Update Subcategory Modal -->
-<!-- Update Subcategory Modal -->
 <div class="modal fade" id="updateSubCategoryModal" tabindex="-1" role="dialog"
     aria-labelledby="updateSubCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered custom-modal-width" role="document">

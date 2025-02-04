@@ -13,6 +13,8 @@ use Illuminate\Validation\Rule; // Add this for validation rules
 class AssetsallocationController extends Controller
 {
 
+
+
     public function index()
     {
         // Fetch asset allocations with status = 1
@@ -58,7 +60,19 @@ class AssetsallocationController extends Controller
 
         return redirect()->back()->with('success', 'Asset allocated successfully!');
     }
+    // Fetch all categories
+    public function getCategories()
+    {
+        $categories = Category::all();
+        return response()->json($categories);
+    }
 
+    // Fetch all employees
+    public function getEmployees()
+    {
+        $employees = Employee::all();
+        return response()->json($employees);
+    }
     // AJAX Methods
     public function getSubCategories(Category $category)
     {

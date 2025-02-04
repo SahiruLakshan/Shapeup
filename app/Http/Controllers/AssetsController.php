@@ -18,38 +18,55 @@ class AssetsController extends Controller
         return view('dashboard.asset_manage.add_new_assert', compact('categories'));
 
     }
+    public function getCategories()
+    {
+        try {
+            $categories = Category::where('status', 1)
+                ->orderBy('category_name', 'ASC')
+                ->get(['id', 'category_name']); // Fetch only required fields
+
+            return response()->json($categories, 200);
+        } catch (\Exception $e) {
+            \Log::error("Error fetching categories: " . $e->getMessage());
+            return response()->json(['error' => 'Unable to fetch categories'], 500);
+        }
+    }
 
     public function getSubcategories(Request $request)
     {
         $categoryId = $request->category_id;
 
-        // Ensure the category_id is passed and valid
+        // Validate category_id
         if (!$categoryId) {
             return response()->json(['error' => 'Category ID is required'], 400);
         }
 
-        // Fetch subcategories
         try {
+            // Fetch active subcategories
             $subcategories = Subcategory::where('category_id', $categoryId)
                 ->where('status', 1)
                 ->orderBy('sub_category', 'ASC')
-                ->get();
+                ->get(['id', 'sub_category']); // Return only required fields
 
-            return response()->json($subcategories);
+            if ($subcategories->isEmpty()) {
+                return response()->json(['message' => 'No subcategories found'], 204);
+            }
+
+            return response()->json($subcategories, 200);
         } catch (\Exception $e) {
-            // Log the error for debugging
             \Log::error("Error fetching subcategories: " . $e->getMessage());
             return response()->json(['error' => 'Unable to fetch subcategories'], 500);
         }
     }
 
 
+
     // Store new asset
     public function store(Request $request)
     {
         $request->validate([
-            'category' => 'required|exists:categories,id',
-            'sub_category' => 'required|exists:sub_categories,id',
+            'category_id' => 'required|exists:categories,id',
+            'sub_category_id' => 'required|exists:sub_categories,id',
             'brand' => 'required|string|max:255',
             'model' => 'required|string|max:255',
             'serial_number' => 'required|string|max:255|unique:assets',
@@ -58,8 +75,8 @@ class AssetsController extends Controller
         ]);
 
         Asset::create([
-            'category_id' => $request->category,
-            'sub_category_id' => $request->sub_category,
+            'category_id' => $request->category_id,
+            'sub_category_id' => $request->sub_category_id,
             'brand' => $request->brand,
             'model' => $request->model,
             'serial_number' => $request->serial_number,
@@ -74,30 +91,25 @@ class AssetsController extends Controller
     public function index()
     {
         $assets = Asset::with('category', 'subCategory')
-        ->where('status', 1)  
-        ->get();
+            ->where('status', 1)
+            ->get();
         return view('dashboard.asset_manage.show_assets', compact('assets'));
     }
 
-    // Edit asset
-    // public function edit($id)
-    // {
-    //     $asset = Asset::findOrFail($id);
-    //     $categories = Category::with([
-    //         'subcategories' => function ($query) {
-    //             $query->where('status', 1);
-    //         }
-    //     ])->where('status', 1)->get();
-
-    //     return view('dashboard.asset_manage.update.update_assets', compact('asset', 'categories'));
-    // }
     public function edit($id)
 {
     $asset = Asset::findOrFail($id);
     $categories = Category::where('status', 1)->get();
     $subCategories = SubCategory::where('status', 1)->get();
-    return view('dashboard.asset_manage.update.update_assets', compact('asset', 'categories', 'subCategories'));
+    
+    // Return the data as JSON to be used by AJAX
+    return response()->json([
+        'asset' => $asset,
+        'categories' => $categories,
+        'subCategories' => $subCategories
+    ]);
 }
+
 
 
     // Update asset

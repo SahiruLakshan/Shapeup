@@ -42,12 +42,8 @@ Route::post('/categories', [CategoryController::class, 'store'])->name('categori
 // Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
 Route::delete('/deletecategories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
-// Edit Category route
-Route::get('/categoryedit/{id}/edit', [CategoryController::class, 'edit'])->name('category.edit');
-
-// Update Category route
-Route::put('/category/{id}', [CategoryController::class, 'update'])->name('category.update');
-
+Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
+Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
 
 //sub category
 
@@ -67,6 +63,7 @@ Route::get('/assets/edit/{id}', [AssetsController::class, 'edit'])->name('assets
 Route::put('/assets/update/{id}', [AssetsController::class, 'update'])->name('assets.update');
 Route::delete('/assets/destroy/{id}', [AssetsController::class, 'destroy'])->name('assets.destroy');
 Route::get('/get-subcategories', [AssetsController::class, 'getSubcategories'])->name('get.subcategories');
+Route::get('/get-categories', [AssetsController::class, 'getCategories']);
 
 //allocate_asserts
 
@@ -81,3 +78,9 @@ Route::delete('/asset-allocations/{id}', [AssetsallocationController::class, 'de
 Route::get('/get-subcategories/{category}', [AssetsallocationController::class, 'getSubCategories']);
 Route::get('/get-assets/{category}/{subcategory}', [AssetsallocationController::class, 'getAssets']);
 Route::get('/get-asset-value/{asset}', [AssetsallocationController::class, 'getAssetValue']);
+
+// Route to fetch categories
+Route::get('/get-categories', [AssetController::class, 'getCategories']);
+
+// Route to fetch employees
+Route::get('/get-employees', [AssetController::class, 'getEmployees']);

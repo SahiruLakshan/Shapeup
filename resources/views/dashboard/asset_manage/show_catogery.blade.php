@@ -32,11 +32,8 @@
                     <td>{{ $category->created_at->format('Y-m-d') }}</td>
                     <td>
 
-                        <button type="button" class="btn btn-warning btn-sm edit-btn" data-toggle="modal"
-                            data-target="#editCategoryModal" data-id="{{ $category->id }}"
-                            data-name="{{ $category->category_name }}">
-                            Edit
-                        </button>
+                        <button class="btn btn-primary edit-category-btn" data-id="{{ $category->id }}">Edit</button>
+
                         <form action="{{ route('categories.destroy', $category->id) }}" method="POST"
                             style="display: inline-block;">
                             @csrf
@@ -110,9 +107,10 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="updateCategoryForm" method="POST" action="{{ route('category.update', $category->id) }}">
+                <form id="updateCategoryForm" method="POST" action="">
                     @csrf
                     @method('PUT')
+                    <input type="hidden" id="edit-category-id" name="id">
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="edit-category-name" class="form-label label-color">Enter category name</label>
@@ -132,6 +130,7 @@
         </div>
     </div>
 </div>
+
 
 <script>
 
@@ -218,100 +217,55 @@
         });
     });
 
-    //   // Show existing data when the user clicks on edit button
-    //   $(document).on('click', '.edit-category-btn', function () {
-    //     var categoryId = $(this).data('id'); // Get category ID from the button's data-id attribute
+    $(document).ready(function() {
+        console.log("fdfdfdfdfdfdfdfdfdfddfddd")
+    });
 
-    //     // Send Ajax request to get the existing data for this category
-    //     $.ajax({
-    //         url: '/category/' + categoryId + '/edit', // Your route to fetch the category
-    //         type: 'GET',
-    //         success: function (data) {
-    //             // Populate the modal with the current category data
-    //             $('#editCategoryModal #edit-category-name').val(data.category_name); 
-    //             $('#updateCategoryForm').attr('action', '/category/' + categoryId); // Update the form action for PUT request
-    //             $('#editCategoryModal').modal('show'); // Show the modal
-    //         }
-    //     });
-    // });
+    $(document).ready(function () {
+    // Open modal and load existing data
+    $('.edit-category-btn').on('click', function () {
+        var categoryId = $(this).data('id');
 
-    // // Submit the form using Ajax to update the category
-    // $('#updateCategoryForm').on('submit', function (e) {
-    //     e.preventDefault(); // Prevent the default form submission
-
-    //     var formData = $(this).serialize(); // Serialize the form data
-    //     var formAction = $(this).attr('action'); // Get the action URL from the form
-
-    //     // Send the update request via Ajax
-    //     $.ajax({
-    //         url: formAction,
-    //         type: 'POST',
-    //         data: formData,
-    //         success: function (response) {
-    //             if (response.success) {
-    //                 alert('Category updated successfully');
-    //                 location.reload(); // Reload the page to show updated data
-    //             } else {
-    //                 alert('Failed to update category');
-    //             }
-    //         },
-    //         error: function (response) {
-    //             alert('Error occurred while updating category');
-    //         }
-    //     });
-    // });
-    $(document).on('click', '.edit-category-btn', function () {
-        var categoryId = $(this).data('id'); // Get category ID from the button's data-id attribute
-
-        // Send Ajax request to get the existing data for this category
         $.ajax({
-            url: '/categoryedit/' + categoryId + '/edit',
+            url: '/categories/' + categoryId + '/edit',
             type: 'GET',
-            success: function (data) {
-                console.log('Fetched category data:', data); // Log the fetched data
-                // Populate the modal with the current category data
-                $('#editCategoryModal #edit-category-name').val(data.category_name);
-                $('#updateCategoryForm').attr('action', '/category/' + categoryId); // Update the form action for PUT request
-                $('#editCategoryModal').modal('show'); // Show the modal
+            success: function (response) {
+                $('#edit-category-id').val(response.id);
+                $('#edit-category-name').val(response.category_name);  // Corrected key
+                $('#updateCategoryForm').attr('action', '/categories/' + categoryId);
+                $('#editCategoryModal').modal('show');  // Ensure modal is triggered
             },
             error: function () {
-                alert('Failed to fetch category data');
+                alert('Failed to fetch category data.');
             }
         });
     });
 
-    // Submit the form using Ajax to update the category
+    // Handle form submission via AJAX
     $('#updateCategoryForm').on('submit', function (e) {
-        e.preventDefault(); // Prevent the default form submission
+        e.preventDefault();
 
-        var formData = $(this).serialize(); // Serialize the form data
-        var formAction = $(this).attr('action'); // Get the action URL from the form
+        var form = $(this);
+        var categoryId = $('#edit-category-id').val();
+        var formData = form.serialize();
 
-        // Send the update request via Ajax
         $.ajax({
-            url: formAction,
+            url: '/categories/' + categoryId,
             type: 'POST',
             data: formData,
             success: function (response) {
-                if (response.success) {
-                    // Show SweetAlert upon success
-                    Swal.fire({
-                        title: 'Success!',
-                        text: 'Category updated successfully',
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
-                        location.reload(); // Reload the page to show updated data
-                    });
-                } else {
-                    alert('Failed to update category');
-                }
+                alert('Category updated successfully!');
+                $('#editCategoryModal').modal('hide');
+                location.reload();  // Reload the page to reflect changes
             },
             error: function () {
-                alert('Error occurred while updating category');
+                alert('Failed to update category.');
             }
         });
     });
+});
+
+
 
 </script>
 @endsection

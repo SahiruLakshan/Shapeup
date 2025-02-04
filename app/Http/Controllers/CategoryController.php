@@ -33,38 +33,29 @@ class CategoryController extends Controller
         ]);
     }
 
-   // Show the category data to be updated
-   public function edit($id)
-   {
-       $category = Category::findOrFail($id); // Get category by ID
-       Log::info('Category data fetched:', ['category' => $category]);
-
-       return response()->json($category); // Return the category data as JSON
-   }
-
-   // Handle the update request
-   public function update(Request $request, $id)
-{
-    // Validate input data
-    $request->validate([
-        'category_name' => 'required|string|max:255',
-    ]);
-
-    // Find the category by ID
-    $category = Category::find($id);
-
-    if (!$category) {
-        return response()->json(['error' => 'Category not found'], 404);
+    // Show the category data to be updated
+    public function edit($id)
+    {
+        $category = Category::findOrFail($id);
+        return response()->json($category);  // Return as JSON
     }
 
-    // Update the category
-    $category->category_name = $request->category_name;
-    $category->save();
+    // Update category details
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'category_name' => 'required|string|max:255',
+        ]);
 
-    // Return response
-    return response()->json(['success' => 'Category updated successfully']);
-}
+        $category = Category::find($id);
+        if ($category) {
+            $category->name = $request->category_name;
+            $category->save();
 
+            return response()->json(['success' => 'Category updated successfully']);
+        }
+        return response()->json(['error' => 'Category not found'], 404);
+    }
     public function destroy($id)
     {
         $category = Category::findOrFail($id);
