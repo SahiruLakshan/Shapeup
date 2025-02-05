@@ -49,7 +49,7 @@ class CategoryController extends Controller
 
         $category = Category::find($id);
         if ($category) {
-            $category->name = $request->category_name;
+            $category->category_name = $request->category_name;
             $category->save();
 
             return response()->json(['success' => 'Category updated successfully']);

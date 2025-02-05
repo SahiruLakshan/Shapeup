@@ -129,7 +129,8 @@
 
 <!-- Edit Asset Modal -->
 <!-- Edit Asset Modal -->
-<div class="modal fade" id="editAssetModal" tabindex="-1" role="dialog" aria-labelledby="editAssetModalLabel" aria-hidden="true">
+<div class="modal fade" id="editAssetModal" tabindex="-1" role="dialog" aria-labelledby="editAssetModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered custom-modal-width" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -205,7 +206,7 @@
         // Function to load categories
         function loadCategories() {
             $.ajax({
-                url: '/get-categories',
+                url: '/getcategories',
                 method: 'GET',
                 success: function (response) {
                     $('#category').empty().append('<option selected disabled>Select category</option>');
@@ -260,82 +261,91 @@
         });
     }
     // JavaScript to handle "check all" functionality
-    document.getElementById('check-all').addEventListener('change', function () {
-        const checkboxes = document.querySelectorAll('.check-item');
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = this.checked;
+    // document.getElementById('check-all').addEventListener('change', function () {
+    //     const checkboxes = document.querySelectorAll('.check-item');
+    //     checkboxes.forEach(checkbox => {
+    //         checkbox.checked = this.checked;
+    //     });
+    // });
+
+
+    $(document).ready(function () {
+        $('#editAssetModal').on('show.bs.modal', function (e) {
+            var assetId = $(e.relatedTarget).data('id');
+            var modal = $(this);
+            console.log('Modal triggered, assetId:', assetId);
+
+            $.ajax({
+                url: '/assets/edit/' + assetId,
+                method: 'GET',
+                success: function (data) {
+                    console.log('Data received:', data);
+                    var categories = data.categories;
+                    var subCategories = data.subCategories;
+                    var asset = data.asset;
+
+                    console.log('Categories:', categories);
+                    console.log('Sub Categories:', subCategories);
+
+                    // Populate Categories
+                    $('#category').empty().append('<option selected disabled>Select Category</option>');
+                    categories.forEach(function (category) {
+                        var option = $('<option>', {
+                            value: category.id,
+                            text: category.category_name,
+                            selected: category.id == asset.category_id
+                        });
+                        console.log('Appending category option:', option);
+                        $('#category').append(option);
+                    });
+
+                    // Populate Sub-Categories
+                    $('#sub_category').empty().append('<option selected disabled>Select Sub Category</option>');
+                    subCategories.forEach(function (subCategory) {
+                        var option = $('<option>', {
+                            value: subCategory.id,
+                            text: subCategory.sub_category,
+                            selected: subCategory.id == asset.sub_category_id
+                        });
+                        console.log('Appending sub-category option:', option);
+                        $('#sub_category').append(option);
+                    });
+
+                    // Populate other form fields
+                    modal.find('#brand').val(asset.brand);
+                    modal.find('#model').val(asset.model);
+                    modal.find('#serial_number').val(asset.serial_number);
+                    modal.find('#code').val(asset.code);
+                    modal.find('#asset_value').val(asset.asset_value);
+
+                    // Update form action URL
+                    modal.find('form').attr('action', '/assets/update/' + assetId);
+                },
+                error: function (xhr, status, error) {
+                    console.error('AJAX Error:', status, error);
+                }
+            });
+        });
+
+        $('#updateAssetForm').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            var formData = form.serialize();
+
+            $.ajax({
+                url: form.attr('action'),
+                method: 'PUT',
+                data: formData,
+                success: function (response) {
+                    $('#editAssetModal').modal('hide');
+                    alert(response.success);
+                    location.reload();
+                },
+                error: function (xhr) {
+                    alert('Error updating asset!');
+                }
+            });
         });
     });
-
-
-    //update
-    $(document).ready(function() {
-    // Triggered when the modal is shown
-    $('#editAssetModal').on('show.bs.modal', function(e) {
-        var assetId = $(e.relatedTarget).data('id');  // Get asset ID from button data-id
-        var modal = $(this);
-        console.log('Modal triggered, assetId:', assetId);  // Log assetId to console
-
-        // Make AJAX request to get asset data, categories, and subcategories
-        $.ajax({
-            url: '/assets/edit/' + assetId,  // Controller route to fetch data
-            method: 'GET',
-            success: function(data) {
-                console.log('Data received:', data);
-                var categories = data.categories;
-                var subCategories = data.subCategories;
-                var asset = data.asset;
-
-                // Clear and populate the categories dropdown
-                $('#category').empty().append('<option selected disabled>Select Category</option>');
-                categories.forEach(function(category) {
-                    $('#category').append('<option value="' + category.id + '" ' + (category.id == asset.category_id ? 'selected' : '') + '>' + category.name + '</option>');
-                });
-
-                // Clear and populate the subcategories dropdown
-                $('#sub_category').empty().append('<option selected disabled>Select Sub Category</option>');
-                subCategories.forEach(function(subCategory) {
-                    $('#sub_category').append('<option value="' + subCategory.id + '" ' + (subCategory.id == asset.sub_category_id ? 'selected' : '') + '>' + subCategory.name + '</option>');
-                });
-
-                // Populate other form fields with the asset's current data
-                modal.find('#brand').val(asset.brand);
-                modal.find('#model').val(asset.model);
-                modal.find('#serial_number').val(asset.serial_number);
-                modal.find('#code').val(asset.code);
-                modal.find('#asset_value').val(asset.asset_value);
-
-                // Update the form's action URL to include the asset ID
-                modal.find('form').attr('action', '/assets/update/' + assetId);
-            },
-            error: function(xhr) {
-                alert('Error fetching asset data!');
-            }
-        });
-    });
-
-    // Handle form submission using AJAX
-    $('#updateAssetForm').on('submit', function(e) {
-        e.preventDefault();
-        var form = $(this);
-        var formData = form.serialize();
-
-        $.ajax({
-            url: form.attr('action'),
-            method: 'PUT',
-            data: formData,
-            success: function(response) {
-                $('#editAssetModal').modal('hide'); // Close the modal
-                alert(response.success); // Show success message
-                location.reload(); // Reload the page
-            },
-            error: function(xhr) {
-                alert('Error updating asset!');
-            }
-        });
-    });
-});
-
-
 </script>
 @endsection

@@ -32,7 +32,7 @@
                     <td>{{ $category->created_at->format('Y-m-d') }}</td>
                     <td>
 
-                        <button class="btn btn-primary edit-category-btn" data-id="{{ $category->id }}">Edit</button>
+                        <button class="btn btn-warning btn-sm edit-category-btn" data-id="{{ $category->id }}">Edit</button>
 
                         <form action="{{ route('categories.destroy', $category->id) }}" method="POST"
                             style="display: inline-block;">
@@ -103,8 +103,8 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="editCategoryModalLabel" style="font-weight:600">Update Category</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+    <span aria-hidden="true">&times;</span>
+</button>
             </div>
             <div class="modal-body">
                 <form id="updateCategoryForm" method="POST" action="">
@@ -125,7 +125,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -210,22 +210,19 @@
 
 
     // JavaScript to handle "check all" functionality
-    document.getElementById('check-all').addEventListener('change', function () {
-        const checkboxes = document.querySelectorAll('.check-item');
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = this.checked;
-        });
-    });
+    // document.getElementById('check-all').addEventListener('change', function () {
+    //     const checkboxes = document.querySelectorAll('.check-item');
+    //     checkboxes.forEach(checkbox => {
+    //         checkbox.checked = this.checked;
+    //     });
+    // });
 
-    $(document).ready(function() {
-        console.log("fdfdfdfdfdfdfdfdfdfddfddd")
-    });
+   
 
     $(document).ready(function () {
     // Open modal and load existing data
     $('.edit-category-btn').on('click', function () {
         var categoryId = $(this).data('id');
-
         $.ajax({
             url: '/categories/' + categoryId + '/edit',
             type: 'GET',
@@ -236,7 +233,12 @@
                 $('#editCategoryModal').modal('show');  // Ensure modal is triggered
             },
             error: function () {
-                alert('Failed to fetch category data.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Failed to fetch category data.',
+                    confirmButtonColor: '#d33'
+                });
             }
         });
     });
@@ -248,24 +250,39 @@
         var form = $(this);
         var categoryId = $('#edit-category-id').val();
         var formData = form.serialize();
-
+        console.log(formData)
         $.ajax({
             url: '/categories/' + categoryId,
-            type: 'POST',
+            type: 'PUT',
             data: formData,
+            
             success: function (response) {
-                alert('Category updated successfully!');
-                $('#editCategoryModal').modal('hide');
-                location.reload();  // Reload the page to reflect changes
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Category updated successfully!',
+                    confirmButtonColor: '#3085d6'
+                }).then(() => {
+                    $('#editCategoryModal').modal('hide');
+                    location.reload();  
+                });
             },
-            error: function () {
-                alert('Failed to update category.');
+            error: function (xhr) {
+                console.log(xhr.responseText);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Update Failed!',
+                    text: 'Failed to update category. Please try again.',
+                    confirmButtonColor: '#d33'
+                });
             }
         });
     });
 });
 
-
+$('.close, .btn-secondary').on('click', function () {
+    $('#editCategoryModal').modal('hide');
+});
 
 </script>
 @endsection

@@ -63,7 +63,7 @@ Route::get('/assets/edit/{id}', [AssetsController::class, 'edit'])->name('assets
 Route::put('/assets/update/{id}', [AssetsController::class, 'update'])->name('assets.update');
 Route::delete('/assets/destroy/{id}', [AssetsController::class, 'destroy'])->name('assets.destroy');
 Route::get('/get-subcategories', [AssetsController::class, 'getSubcategories'])->name('get.subcategories');
-Route::get('/get-categories', [AssetsController::class, 'getCategories']);
+Route::get('/getcategories', [AssetsController::class, 'getCategories']);
 
 //allocate_asserts
 
