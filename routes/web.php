@@ -18,8 +18,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-//Budget Process
+
 Route::get('/', [BudgetController::class, 'index'])->name('dashboard');
+
+//Budget Process
 Route::post('/submit-budget', [BudgetController::class, 'store'])->name('budget.store');
 Route::post('/budgetplansubmit', [BudgetController::class, 'budgetplansubmit'])->name('budgetplan.store');
 Route::get('/budgetview', [BudgetController::class, 'budgets'])->name('budgetplan.view');
