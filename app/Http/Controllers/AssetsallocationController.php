@@ -9,6 +9,7 @@ use App\Models\SubCategory;
 use App\Models\AssetAllocation;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule; // Add this for validation rules
+use Illuminate\Support\Facades\Log;
 
 class AssetsallocationController extends Controller
 {
@@ -63,15 +64,30 @@ class AssetsallocationController extends Controller
     // Fetch all categories
     public function getCategories()
     {
-        $categories = Category::all();
+        $categories = Category::where('status', 1)->get();
+        if ($categories->isEmpty()) {
+            return response()->json(['message' => 'No categories found'], 404);
+        }
         return response()->json($categories);
     }
 
     // Fetch all employees
     public function getEmployees()
     {
-        $employees = Employee::all();
-        return response()->json($employees);
+        try {
+            // Fetch only active employees with 'emp_name_with_initial'
+            $employees = Employee::active()->pluck('emp_name_with_initial', 'id');
+
+            // Log the fetched employee names
+            Log::info('Active employee names fetched:', ['employees' => $employees]);
+
+            return response()->json($employees);
+        } catch (\Exception $e) {
+            // Log the error message
+            Log::error('Error fetching employee names:', ['error' => $e->getMessage()]);
+
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
     // AJAX Methods
     public function getSubCategories(Category $category)
@@ -116,9 +132,16 @@ class AssetsallocationController extends Controller
             ->where('sub_category_id', $assetAllocation->sub_category_id)
             ->where('status', 1)
             ->get();
-        $employees = Employee::all();
+        $employees = Employee::active()->pluck('emp_name_with_initial', 'id');
 
-        return view('dashboard.asset_manage.update.update_assets_allocation', compact('assetAllocation', 'categories', 'subcategories', 'assets', 'employees'));
+
+        return response()->json([
+            'assetAllocation' => $assetAllocation,
+            'categories' => $categories,
+            'subcategories' => $subcategories,
+            'assets' => $assets,
+            'employees' => $employees
+        ]);
     }
     public function update(Request $request, $id)
     {
@@ -153,7 +176,7 @@ class AssetsallocationController extends Controller
             'description' => $validated['description']
         ]);
 
-        return redirect()->route('asset-allocations.index')->with('success', 'Asset allocation updated successfully!');
+        return response()->json(['success' => 'Asset allocation updated successfully!']);
     }
 
 

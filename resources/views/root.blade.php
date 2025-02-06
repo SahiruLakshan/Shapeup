@@ -38,7 +38,7 @@
         crossorigin="anonymous"></script>
 
 
-    <script src="{{ asset('js/graph.js') }}"></script>
+    <!-- <script src="{{ asset('js/graph.js') }}"></script> -->
 
 
     <script crossorigin="anonymous"

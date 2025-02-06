@@ -38,10 +38,7 @@ Route::get('/compage', function () {
 
 Route::get('/categoryview', [CategoryController::class, 'index'])->name('categories.index');
 Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
-// Route::get('/categoriesedit/{id}', [CategoryController::class, 'edit'])->name('categories.edit');
-// Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
 Route::delete('/deletecategories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
-
 Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
 Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
 
@@ -80,7 +77,5 @@ Route::get('/get-assets/{category}/{subcategory}', [AssetsallocationController::
 Route::get('/get-asset-value/{asset}', [AssetsallocationController::class, 'getAssetValue']);
 
 // Route to fetch categories
-Route::get('/get-categories', [AssetController::class, 'getCategories']);
-
-// Route to fetch employees
-Route::get('/get-employees', [AssetController::class, 'getEmployees']);
+Route::get('/get-categories', [AssetsallocationController::class, 'getCategories']);
+Route::get('/get-employees', [AssetsallocationController::class, 'getEmployees']);

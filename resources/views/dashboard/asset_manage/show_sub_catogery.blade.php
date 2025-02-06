@@ -2,9 +2,11 @@
 @section('content')
 
 <div style="margin-top: 50px">
-    <h6 style="color:#007bff">Home <i class="bi bi-chevron-right"></i> Budget Comparison</h6>
+    <h6 style="color:#007bff">Home <i class="bi bi-chevron-right"></i>             Add New Subcategory
+    </h6>
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3 style="font-weight: bold">Budget Comparison</h3>
+        <h3 style="font-weight: bold">             Subcategory
+        </h3>
         <div class="position-relative w-25 search-box">
             <input type="text" class="form-control search-box" placeholder="Search..." />
             <i class="fas fa-search position-absolute" style="top: 50%; right: 10px; transform: translateY(-50%)"></i>
