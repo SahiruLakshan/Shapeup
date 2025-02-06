@@ -11,6 +11,12 @@ use Illuminate\Http\Request;
 class BudgetController extends Controller
 {
     
+    //dashboard page
+    public function index()
+    {
+        return view('dashboard.dashboard');
+    }
+
     //Master Page Process
     public function store(Request $request)
     {

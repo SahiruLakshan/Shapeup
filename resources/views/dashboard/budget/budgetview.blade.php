@@ -4,15 +4,11 @@
         <h6 style="color:#007bff">Home <i class="bi bi-chevron-right"></i> Budget Comparison</h6>
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3 style="font-weight: bold">Budget Comparison</h3>
-            <div class="position-relative w-25 search-box">
-                <input type="text" class="form-control search-box" placeholder="Search..." />
-                <i class="fas fa-search position-absolute" style="top: 50%; right: 10px; transform: translateY(-50%)"></i>
-            </div>
         </div>
         <button class="btn btn-primary" data-toggle="modal" data-target="#budgetmodal"><i class="bi bi-plus"></i> Add
             the Budget</button>
         <button class="btn btn-warning">Generate Report</button>
-        <table class="table table-striped" style="margin-top: 30px">
+        <table class="table table-striped" style="margin-top: 30px" id="myTable">
             <thead>
                 <tr class="table-secondary">
                     <th><input type="checkbox" id="check-all" /></th>
@@ -54,10 +50,10 @@
                 <!-- Tab Navigation -->
                 <ul class="nav nav-tabs" id="budgetTabs">
                     <li class="nav-item">
-                        <a class="nav-link" id="budgetMasterTab" data-toggle="tab" href="#budgetMaster">Budget Master</a>
+                        <a class="nav-link" id="budgetMasterTab" data-toggle="tab" href="#budgetMaster">Date Range</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" id="budgetSubTab" data-toggle="tab" href="#budgetSub">Budget Sub</a>
+                        <a class="nav-link active" id="budgetSubTab" data-toggle="tab" href="#budgetSub">Budget Process</a>
                     </li>
                 </ul>
     
@@ -288,11 +284,6 @@
         });
   
         // JavaScript to handle "check all" functionality of Table
-        document.getElementById('check-all').addEventListener('change', function() {
-            const checkboxes = document.querySelectorAll('.check-item');
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = this.checked;
-            });
-        });
+        let table = new DataTable('#myTable');
     </script>
 @endsection

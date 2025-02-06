@@ -17,11 +17,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard.dashboard');
-});
 
 //Budget Process
+Route::get('/', [BudgetController::class, 'index'])->name('dashboard');
 Route::post('/submit-budget', [BudgetController::class, 'store'])->name('budget.store');
 Route::post('/budgetplansubmit', [BudgetController::class, 'budgetplansubmit'])->name('budgetplan.store');
 Route::get('/budgetview', [BudgetController::class, 'budgets'])->name('budgetplan.view');
