@@ -4,7 +4,9 @@ use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\AssetsController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AssetsallocationController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,23 +19,6 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::get('/', function () {
-    return view('dashboard.dashboard');
-});
-
-//Budget Process
-Route::get('/budgetmaster', [BudgetController::class, 'master'])->name('budget.master');
-Route::post('/submit-budget', [BudgetController::class, 'store'])->name('budget.store');
-Route::get('/budget', [BudgetController::class, 'index'])->name('budget.index');
-Route::get('/budgetprocess', [BudgetController::class, 'sub'])->name('budget.sub');
-Route::post('/budgetplansubmit', [BudgetController::class, 'budgetplansubmit'])->name('budgetplan.store');
-
-
-Route::get('/compage', function () {
-    return view('dashboard.budgetview');
-});
-
 //category
 
 Route::get('/categoryview', [CategoryController::class, 'index'])->name('categories.index');
@@ -79,3 +64,14 @@ Route::get('/get-asset-value/{asset}', [AssetsallocationController::class, 'getA
 // Route to fetch categories
 Route::get('/get-categories', [AssetsallocationController::class, 'getCategories']);
 Route::get('/get-employees', [AssetsallocationController::class, 'getEmployees']);
+
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+//Budget Process
+Route::post('/submit-budget', [BudgetController::class, 'store'])->name('budget.store');
+Route::post('/budgetplansubmit', [BudgetController::class, 'budgetplansubmit'])->name('budgetplan.store');
+Route::get('/budgetview', [BudgetController::class, 'budgets'])->name('budgetplan.view');
+
+
+
