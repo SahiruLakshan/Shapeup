@@ -15,7 +15,7 @@
             Add
             New Category</button>
     </div>
-    <table class="table table-bordered mt-2 table-striped">
+    <table class="display" id="myTable">
         <thead>
             <tr>
                 <th>#</th>
@@ -220,6 +220,10 @@
    
 
     $(document).ready(function () {
+        let table = new DataTable('#myTable', {
+            responsive: true
+        });
+        console.log("🚀 ~ table:", table)
     // Open modal and load existing data
     $('.edit-category-btn').on('click', function () {
         var categoryId = $(this).data('id');

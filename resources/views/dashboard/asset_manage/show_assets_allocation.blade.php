@@ -14,7 +14,7 @@
         <button class="btn btn-primary" data-toggle="modal" data-target="#addAssetModal">New Asset Allocation</button>
 
     </div>
-    <table class="table table-bordered mt-5 table-striped">
+    <table class="display" id="datatable">
         <thead>
             <tr>
                 <th>#</th>
@@ -322,6 +322,9 @@
 
 
     $(document).ready(function () {
+        let table = new DataTable('#datatable', {
+    responsive: true
+});
         // Load categories and employees when the modal is shown
         $('#addAssetModal').on('show.bs.modal', function () {
             loadCategories();  // Load categories when modal opens

@@ -18,7 +18,7 @@
             Add New Subcategory
         </button>
     </div>
-    <table class="table table-bordered mt-2 table-striped">
+    <table class="display" id="datatable">
         <thead>
             <tr>
                 <th>#</th>
@@ -152,6 +152,10 @@
 
 <script>
   $(document).ready(function () {
+    let table = new DataTable('#datatable', {
+        responsive: true,
+        
+    });
     // Handle form submission using AJAX
     $('#addSubCategoryForm').submit(function (e) {
         e.preventDefault(); // Prevent default form submission
