@@ -28,7 +28,6 @@ Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('
 Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
 
 //sub category
-
 Route::get('/sub_category', [SubCategoryController::class, 'index'])->name('subcategories.index');
 Route::get('/subcategoryview', [SubCategoryController::class, 'show'])->name('subcategories.show');
 Route::get('/subcategories/{id}/edit', [SubCategoryController::class, 'edit'])->name('subcategories.edit');
@@ -37,7 +36,6 @@ Route::post('/create_sub_category', [SubCategoryController::class, 'store'])->na
 Route::delete('/deletesubcategories/{id}', [SubCategoryController::class, 'destroy'])->name('subcategories.destroy');
 
 //Add new asset
-
 Route::get('/viewassets', [AssetsController::class, 'index'])->name('assets.index');
 Route::get('/assets_create', [AssetsController::class, 'create'])->name('assets.create');
 Route::post('/assets/store', [AssetsController::class, 'store'])->name('assets.store');
@@ -48,7 +46,6 @@ Route::get('/get-subcategories', [AssetsController::class, 'getSubcategories'])-
 Route::get('/getcategories', [AssetsController::class, 'getCategories']);
 
 //allocate_asserts
-
 Route::get('/asset-allocations', [AssetsallocationController::class, 'index'])->name('asset-allocations.index');
 Route::get('/asset-allocations/create', [AssetsallocationController::class, 'create'])->name('asset-allocations.create');
 Route::post('/assetallocationstore', [AssetsallocationController::class, 'store'])->name('asset-allocations.store');
@@ -65,7 +62,7 @@ Route::get('/get-asset-value/{asset}', [AssetsallocationController::class, 'getA
 Route::get('/get-categories', [AssetsallocationController::class, 'getCategories']);
 Route::get('/get-employees', [AssetsallocationController::class, 'getEmployees']);
 
-
+//Dashboard
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 //Budget Process
